@@ -8,13 +8,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, ".")));
 
-// Configuração com os dados da sua imagem
+// Configuração com o NOVO HOST e PORTA que você enviou
 const db = mysql.createConnection({
-  host: process.env.MYSQLHOST || "yamanote.proxy.rlwy.net",
+  host: process.env.MYSQLHOST || "hopper.proxy.rlwy.net",
   user: process.env.MYSQLUSER || "root",
   password: process.env.MYSQLPASSWORD || "NywwwbFlzvPiVtoDmTxtmCvXmoZiCsS",
   database: process.env.MYSQLDATABASE || "railway",
-  port: process.env.MYSQLPORT || 54256
+  port: process.env.MYSQLPORT || 54673
 });
 
 db.connect((err) => {
@@ -22,8 +22,8 @@ db.connect((err) => {
     console.error("❌ Erro ao conectar no MySQL:", err);
     return;
   }
-  console.log("✅ Conectado ao banco de dados do Railway!");
-  
+  console.log("✅ Conectado ao banco de dados Hopper (Railway)!");
+
   // Criação automática das tabelas
   db.query(`CREATE TABLE IF NOT EXISTS registros (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -42,7 +42,7 @@ db.connect((err) => {
   )`);
 });
 
-// Rotas para receber dados (POST)
+// --- ROTAS DE ENVIO (POST) ---
 app.post("/api/ajudar", (req, res) => {
   const { tipo, endereco, descricao } = req.body;
   db.query("INSERT INTO registros (tipo, endereco, descricao) VALUES (?, ?, ?)", 
@@ -61,7 +61,7 @@ app.post("/api/voluntarios", (req, res) => {
   });
 });
 
-// Rotas para ler dados (GET para a página admin.html)
+// --- ROTAS DE CONSULTA (GET para admin.html) ---
 app.get("/api/logs-registros", (req, res) => {
   db.query("SELECT * FROM registros ORDER BY data_registro DESC", (err, results) => {
     if (err) return res.status(500).json(err);

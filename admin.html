@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel Administrativo | Doe Esperança</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    table { width: 100%; border-collapse: collapse; margin-bottom: 30px; background: white; }
+    th, td { border: 1px solid #ddd; padding: 12px; text-align: left; color: black; }
+    th { background-color: #f4f4f4; }
+    .container { padding: 50px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Painel de Controle</h1>
+    <button onclick="carregarLogs()">Atualizar Dados</button>
+
+    <h2>Doações e Pedidos</h2>
+    <table id="tabelaRegistros">
+      <thead>
+        <tr>
+          <th>ID</th><th>Tipo</th><th>Endereço</th><th>Descrição</th><th>Data</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <h2>Voluntários Cadastrados</h2>
+    <table id="tabelaVoluntarios">
+      <thead>
+        <tr>
+          <th>ID</th><th>Nome</th><th>Telefone</th><th>Email</th><th>Data</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    async function carregarLogs() {
+      // Carregar Registros
+      const resReg = await fetch('/api/logs-registros');
+      const registros = await resReg.json();
+      const corpoReg = document.querySelector('#tabelaRegistros tbody');
+      corpoReg.innerHTML = registros.map(r => `
+        <tr>
+          <td>${r.id}</td><td>${r.tipo}</td><td>${r.endereco}</td><td>${r.descricao}</td><td>${new Date(r.data_registro).toLocaleString()}</td>
+        </tr>
+      `).join('');
+
+      // Carregar Voluntários
+      const resVol = await fetch('/api/logs-voluntarios');
+      const voluntarios = await resVol.json();
+      const corpoVol = document.querySelector('#tabelaVoluntarios tbody');
+      corpoVol.innerHTML = voluntarios.map(v => `
+        <tr>
+          <td>${v.id}</td><td>${v.nome}</td><td>${v.telefone}</td><td>${v.email}</td><td>${new Date(v.data_registro).toLocaleString()}</td>
+        </tr>
+      `).join('');
+    }
+
+    // Carrega ao abrir a página
+    carregarLogs();
+  </script>
+</body>
+</html>

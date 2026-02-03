@@ -64,3 +64,19 @@ app.post("/api/voluntarios", (req, res) => {
 // Porta dinâmica para o Railway
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+
+// Rota para buscar todas as doações e pedidos
+app.get("/api/logs-registros", (req, res) => {
+  db.query("SELECT * FROM registros ORDER BY data_registro DESC", (err, results) => {
+    if (err) return res.status(500).json(err);
+    res.json(results);
+  });
+});
+
+// Rota para buscar todos os voluntários
+app.get("/api/logs-voluntarios", (req, res) => {
+  db.query("SELECT * FROM voluntarios ORDER BY data_registro DESC", (err, results) => {
+    if (err) return res.status(500).json(err);
+    res.json(results);
+  });
+});v

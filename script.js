@@ -8,21 +8,21 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, ".")));
 
-// Configuração com o Host e Porta que você enviou
+// Configuração com os dados da sua imagem
 const db = mysql.createConnection({
   host: process.env.MYSQLHOST || "yamanote.proxy.rlwy.net",
   user: process.env.MYSQLUSER || "root",
-  password: process.env.MYSQLPASSWORD || "EWHpGbwXsrAXCLtNumvdzvlrsbacyoLK", // Insira a senha que aparece no Railway
-  database: process.env.MYSQLDATABASE || "railway",       // Verifique se o nome é 'railway' ou 'doe'
+  password: process.env.MYSQLPASSWORD || "NywwwbFlzvPiVtoDmTxtmCvXmoZiCsS",
+  database: process.env.MYSQLDATABASE || "railway",
   port: process.env.MYSQLPORT || 54256
 });
 
 db.connect((err) => {
   if (err) {
-    console.error("Erro ao conectar no banco:", err);
+    console.error("❌ Erro ao conectar no MySQL:", err);
     return;
   }
-  console.log("Banco de Dados conectado com sucesso!");
+  console.log("✅ Conectado ao banco de dados do Railway!");
   
   // Criação automática das tabelas
   db.query(`CREATE TABLE IF NOT EXISTS registros (
@@ -42,7 +42,7 @@ db.connect((err) => {
   )`);
 });
 
-// --- ROTAS DE ENVIO (POST) ---
+// Rotas para receber dados (POST)
 app.post("/api/ajudar", (req, res) => {
   const { tipo, endereco, descricao } = req.body;
   db.query("INSERT INTO registros (tipo, endereco, descricao) VALUES (?, ?, ?)", 
@@ -61,7 +61,7 @@ app.post("/api/voluntarios", (req, res) => {
   });
 });
 
-// --- ROTAS DE CONSULTA (GET para a página admin) ---
+// Rotas para ler dados (GET para a página admin.html)
 app.get("/api/logs-registros", (req, res) => {
   db.query("SELECT * FROM registros ORDER BY data_registro DESC", (err, results) => {
     if (err) return res.status(500).json(err);
@@ -77,4 +77,4 @@ app.get("/api/logs-voluntarios", (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Servidor rodando na porta ${PORT}`));

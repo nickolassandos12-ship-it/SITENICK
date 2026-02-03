@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname, ".")));
 const db = mysql.createConnection({
   host: process.env.MYSQLHOST || "hopper.proxy.rlwy.net",
   user: process.env.MYSQLUSER || "root",
-  password: process.env.MYSQLPASSWORD || "NywwwbFlzvPiVtoDmTxtmCvXmoZiCsS",
+  password: process.env.MYSQLPASSWORD || "NywwvwbFIzvPiVtoDmTxtmCvXmoZiCsS",
   database: process.env.MYSQLDATABASE || "railway",
   port: process.env.MYSQLPORT || 54673
 });
@@ -76,5 +76,5 @@ app.get("/api/logs-voluntarios", (req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3306;
 app.listen(PORT, () => console.log(`🚀 Servidor rodando na porta ${PORT}`));
